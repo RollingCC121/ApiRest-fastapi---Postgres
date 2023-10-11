@@ -38,6 +38,14 @@ def read():
     data = conn.read_autobus()
     return conn.read_autobus()
 
+@app.get("/api/autobus/{id}")
+def det_one(id:int):
+    return conn.read_one_autobus(id)
+
+@app.delete("/api/autobus/{id}")
+def delete(id:int):
+    conn.delete_autobus(id)
+
 #ruta para las crud de cargador
 @app.post("/api/cargador")
 def insert (Cargador_data:CargadorSchema):
@@ -49,6 +57,10 @@ def insert (Cargador_data:CargadorSchema):
 def read():
     data = conn.read_cargador()
     return conn.read_cargador()
+
+@app.get("/api/cargador/{id}")
+def det_one(id:int):
+    return conn.read_one_cargador(id)
 
 #ruta para las crud de horario
 @app.post("/api/horario")
@@ -62,6 +74,10 @@ def read():
     data = conn.read_horario()
     return conn.read_horario()
 
+@app.get("/api/horario/{id}")
+def det_one(id:int):
+    return conn.read_one_horario(id)
+
 #ruta para las crud de prog_autobus
 @app.post("/api/prog_autobus")
 def insert (ProgAutobus_data:ProgramacionAutobusesSchema):
@@ -74,6 +90,10 @@ def read():
     data = conn.read_programacion_autobuses()
     return conn.read_programacion_autobuses()
 
+@app.get("/api/prog_autobus/{id}")
+def det_one(id:int):
+    return conn.read_one_prog_autobus(id)
+
 #ruta para las crud de prog_cargador
 @app.post("/api/prog_cargador")
 def insert (ProgCargador_data:ProgramacionCargadoresSchema):
@@ -81,7 +101,11 @@ def insert (ProgCargador_data:ProgramacionCargadoresSchema):
     print(data)
     conn.Programacion_cargadoresWrite(data)
 
-@app.get("/api/prog_caragdor")
+@app.get("/api/prog_cargador")
 def read():
     data = conn.read_programacion_cargadores()
     return conn.read_programacion_cargadores()
+
+@app.get("/api/prog_cargador/{id}")
+def det_one(id:int):
+    return conn.read_one_prog_cargador(id)

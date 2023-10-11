@@ -80,6 +80,48 @@ class Connection():
                     SELECT * FROM "programacion_cargadores"
                                 """)
             return data.fetchall()
+    
+    def read_one_autobus(self, id):
+        with self.conn.cursor() as cur:
+            data = cur.execute("""
+                    SELECT * FROM "autobus" WHERE id_autobus = %s
+                                """, (id,))
+            return data.fetchone()
+        
+    def read_one_cargador(self, id):
+        with self.conn.cursor() as cur:
+            data = cur.execute("""
+                    SELECT * FROM "cargador" WHERE id_cargador = %s
+                                """, (id,))
+            return data.fetchone()
+        
+    def read_one_horario(self, id):
+        with self.conn.cursor() as cur:
+            data = cur.execute("""
+                    SELECT * FROM "horario" WHERE id_horario = %s
+                                """, (id,))
+            return data.fetchone()
+        
+    def read_one_prog_autobus(self, id):
+        with self.conn.cursor() as cur:
+            data = cur.execute("""
+                    SELECT * FROM "programacion_autobuses" WHERE id_programacion_autobuses = %s
+                                """, (id,))
+            return data.fetchone()
+        
+    def read_one_prog_cargador(self, id):
+        with self.conn.cursor() as cur:
+            data = cur.execute("""
+                    SELECT * FROM "programacion_cargadores" WHERE id_programacion_cargadores = %s
+                                """, (id,))
+            return data.fetchone()
+
+    def delete_autobus(self, id):
+        with self.conn.cursor() as cur:
+            cur.execute("""
+                    DELETE FROM "autobus" WHERE id_autobus = %s
+                        """, (id,))
+        self.conn.commit()
 
     def __def__(self):
         self.conn.close()
