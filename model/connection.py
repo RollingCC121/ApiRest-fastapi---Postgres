@@ -46,6 +46,41 @@ class Connection():
                         """, data)
             self.conn.commit()
 
+    def read_autobus(self):
+        with self.conn.cursor() as cur:
+            data = cur.execute("""
+                    SELECT * FROM "autobus"
+                                """)
+            return data.fetchall()
+    
+    def read_cargador(self):
+        with self.conn.cursor() as cur:
+            data = cur.execute("""
+                    SELECT * FROM "cargador"
+                                """)
+            return data.fetchall()
+    
+    def read_horario(self):
+        with self.conn.cursor() as cur:
+            data = cur.execute("""
+                    SELECT * FROM "horario"
+                                """)
+            return data.fetchall()
+    
+    def read_programacion_autobuses(self):
+        with self.conn.cursor() as cur:
+            data = cur.execute("""
+                    SELECT * FROM "programacion_autobuses"
+                               """)
+            return data.fetchall()
+    
+    def read_programacion_cargadores(self):
+        with self.conn.cursor() as cur:
+            data = cur.execute("""
+                    SELECT * FROM "programacion_cargadores"
+                                """)
+            return data.fetchall()
+
     def __def__(self):
         self.conn.close()
         
