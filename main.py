@@ -62,6 +62,10 @@ def read():
 def det_one(id:int):
     return conn.read_one_cargador(id)
 
+@app.delete("/api/cargador/{id}")
+def delete(id:int):
+    conn.delete_cargador(id)
+
 #ruta para las crud de horario
 @app.post("/api/horario")
 def insert (Horario_data:HorarioSchema):
@@ -77,6 +81,10 @@ def read():
 @app.get("/api/horario/{id}")
 def det_one(id:int):
     return conn.read_one_horario(id)
+
+@app.delete("/api/horario/{id}")
+def delete(id:int):
+    conn.delete_horario(id)
 
 #ruta para las crud de prog_autobus
 @app.post("/api/prog_autobus")
@@ -94,6 +102,10 @@ def read():
 def det_one(id:int):
     return conn.read_one_prog_autobus(id)
 
+@app.delete("/api/prog_autobus/{id}")
+def delete(id:int):
+    conn.delete_prog_autobus(id)
+
 #ruta para las crud de prog_cargador
 @app.post("/api/prog_cargador")
 def insert (ProgCargador_data:ProgramacionCargadoresSchema):
@@ -109,3 +121,7 @@ def read():
 @app.get("/api/prog_cargador/{id}")
 def det_one(id:int):
     return conn.read_one_prog_cargador(id)
+
+@app.delete("/api/prog_cargador/{id}")
+def delete(id:int):
+    conn.delete_prog_cargador(id)

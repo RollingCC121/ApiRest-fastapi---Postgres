@@ -123,6 +123,36 @@ class Connection():
                         """, (id,))
         self.conn.commit()
 
+    def delete_cargador(self, id):
+        with self.conn.cursor() as cur:
+            cur.execute("""
+                    DELETE FROM "cargador" WHERE id_cargador = %s
+                        """, (id,))
+        self.conn.commit()
+
+    def delete_horario(self, id):
+        with self.conn.cursor() as cur:
+            cur.execute("""
+                    DELETE FROM "horario" WHERE id_horario = %s
+                        """, (id,))
+        self.conn.commit()
+
+    def delete_prog_autobus(self, id):
+        with self.conn.cursor() as cur:
+            cur.execute("""
+                    DELETE FROM "programacion_autobuses" WHERE id_programacion_autobuses = %s
+                        """, (id,))
+        self.conn.commit()
+    
+    def delete_prog_cargador(self, id):
+        with self.conn.cursor() as cur:
+            cur.execute("""
+                    DELETE FROM "programacion_cargadores" WHERE id_programacion_cargadores = %s
+                        """, (id,))
+        self.conn.commit()
+
+
+
     def __def__(self):
         self.conn.close()
         
