@@ -151,7 +151,40 @@ class Connection():
                         """, (id,))
         self.conn.commit()
 
+    def update_autobus(self, data):
+        with self.conn.cursor() as cur:
+            cur.execute("""
+                    UPDATE "autobus" SET placa = %(placa)s, marca = %(marca)s, ruta = %(ruta)s WHERE id_autobus = %(id_autobus)s
+                        """, data)
+        self.conn.commit()
 
+    def update_cargador(self, data):
+        with self.conn.cursor() as cur:
+            cur.execute("""
+                    UPDATE "cargador" SET autobus_fk = %(autobus_fk)s WHERE id_cargador = %(id_cargador)s
+                        """, data)
+        self.conn.commit()
+
+    def update_horario(self, data):
+        with self.conn.cursor() as cur:
+            cur.execute("""
+                    UPDATE "horario" SET hora = %(hora)s, hora_pico = %(hora_pico)s WHERE id_horario = %(id_horario)s
+                        """, data)
+        self.conn.commit()
+
+    def update_prog_autobus(self, data):
+        with self.conn.cursor() as cur:
+            cur.execute("""
+                    UPDATE "programacion_autobuses" SET autobus_fk = %(autobus_fk)s, horario_fk = %(horario_fk)s WHERE id_programacion_autobuses = %(id_programacion_autobuses)s
+                        """, data)
+        self.conn.commit()
+
+    def update_prog_cargador(self, data):
+        with self.conn.cursor() as cur:
+            cur.execute("""
+                    UPDATE "programacion_cargadores" SET autobus_fk = %(autobus_fk)s, horario_fk = %(horario_fk)s WHERE id_programacion_cargadores = %(id_programacion_cargadores)s
+                        """, data)
+        self.conn.commit()
 
     def __def__(self):
         self.conn.close()

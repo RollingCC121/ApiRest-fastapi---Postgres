@@ -11,8 +11,9 @@ conn = Connection()
 
 @app.get("/api")
 def root():
-    data = conn.read_all()
-    return conn.read_all()
+    #data = conn.read_all()
+    #return conn.read_all()
+    return "en linea"
     '''
     items = []
         for data in conn.read_all():
@@ -46,6 +47,13 @@ def det_one(id:int):
 def delete(id:int):
     conn.delete_autobus(id)
 
+@app.put("/api/autobus/{id}")
+def update(Autobus_data:AutobusSchema, id:int):
+    data = Autobus_data.dict()
+    data["id_autobus"] = id
+    print(data)
+    conn.update_autobus(data)
+
 #ruta para las crud de cargador
 @app.post("/api/cargador")
 def insert (Cargador_data:CargadorSchema):
@@ -65,6 +73,13 @@ def det_one(id:int):
 @app.delete("/api/cargador/{id}")
 def delete(id:int):
     conn.delete_cargador(id)
+
+@app.put("/api/caragdor/{id}")
+def update(Cargador_data:CargadorSchema, id:int):
+    data = Cargador_data.dict()
+    data["id_cargador"] = id
+    print(data)
+    conn.update_cargador(data)
 
 #ruta para las crud de horario
 @app.post("/api/horario")
@@ -86,6 +101,13 @@ def det_one(id:int):
 def delete(id:int):
     conn.delete_horario(id)
 
+@app.put("/api/horario/{id}")
+def update(Horario_data:HorarioSchema, id:int):
+    data = Horario_data.dict()
+    data["id_horario"] = id
+    print(data)
+    conn.update_horario(data)
+
 #ruta para las crud de prog_autobus
 @app.post("/api/prog_autobus")
 def insert (ProgAutobus_data:ProgramacionAutobusesSchema):
@@ -106,6 +128,13 @@ def det_one(id:int):
 def delete(id:int):
     conn.delete_prog_autobus(id)
 
+@app.put("/api/prog_autobus/{id}")
+def update(progauto_data:ProgramacionAutobusesSchema, id:int):
+    data = progauto_data.dict()
+    data["id_programacion_autobuses"] = id
+    print(data)
+    conn.update_prog_autobus(data)
+
 #ruta para las crud de prog_cargador
 @app.post("/api/prog_cargador")
 def insert (ProgCargador_data:ProgramacionCargadoresSchema):
@@ -125,3 +154,10 @@ def det_one(id:int):
 @app.delete("/api/prog_cargador/{id}")
 def delete(id:int):
     conn.delete_prog_cargador(id)
+
+@app.put("/api/prog_cargador/{id}")
+def update(progcarg_data:ProgramacionCargadoresSchema, id:int):
+    data = progcarg_data.dict()
+    data["id_programacion_cargadores"] = id
+    print(data)
+    conn.update_prog_cargador(data)
