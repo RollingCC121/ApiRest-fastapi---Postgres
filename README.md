@@ -19,6 +19,6 @@ source venv\Scripts\activate
 ## Paso 3:
 Corre el servidor del api con el sig comando.
 ```shell
-uvicorn main:app --reload
+uvicorn controlador:app --reload
 ```
 
