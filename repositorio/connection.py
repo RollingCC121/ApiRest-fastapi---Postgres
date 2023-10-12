@@ -14,35 +14,28 @@ class Connection():
     def AutobusWrite(self,data):
         with self.conn.cursor() as cur:
             cur.execute("""
-                    INSERT INTO "autobus"(placa,marca,ruta) VALUES(%(placa)s, %(marca)s, %(ruta)s) 
+                    INSERT INTO "autobus"(estado) VALUES(%(estado)s) 
                         """, data)
             self.conn.commit()
     
     def CargadorWrite(self,data):
         with self.conn.cursor() as cur:
             cur.execute("""
-                    INSERT INTO "cargador"(autobus_fk) VALUES(%(autobus_fk)s) 
+                    INSERT INTO "cargador"(estado) VALUES(%(estado)s) 
                         """, data)
             self.conn.commit()
 
     def HorarioWrite(self,data):
         with self.conn.cursor() as cur:
             cur.execute("""
-                    INSERT INTO "horario"(hora,hora_pico) VALUES(%(hora)s, %(hora_pico)s) 
+                    INSERT INTO "horario"(hora_pico,hora_inicio,hora_fin) VALUES(%(hora_pico)s, %(hora_inicio)s, %(hora_fin)s) 
                         """, data)
             self.conn.commit()
 
-    def Programacion_autobusesWrite(self,data):
+    def UsoCargadorBusWrite(self,data):
         with self.conn.cursor() as cur:
             cur.execute("""
-                    INSERT INTO "programacion_autobuses"(autobus_fk,horario_fk) VALUES(%(autobus_fk)s, %(horario_fk)s) 
-                        """, data)
-            self.conn.commit()
-
-    def Programacion_cargadoresWrite(self,data):
-        with self.conn.cursor() as cur:
-            cur.execute("""
-                    INSERT INTO "programacion_cargadores"(autobus_fk,horario_fk) VALUES(%(autobus_fk)s, %(horario_fk)s) 
+                    INSERT INTO "uso_cargador_bus"(horario_fk, cargador_fk, autobus_fk) VALUES(%(horario_fk)s, %(cargador_fk)s, %(autobus_fk)s) 
                         """, data)
             self.conn.commit()
 
@@ -67,19 +60,13 @@ class Connection():
                                 """)
             return data.fetchall()
     
-    def read_programacion_autobuses(self):
+    def read_uso_cargador_bus(self):
         with self.conn.cursor() as cur:
             data = cur.execute("""
-                    SELECT * FROM "programacion_autobuses"
+                    SELECT * FROM "uso_cargador_bus"
                                """)
             return data.fetchall()
     
-    def read_programacion_cargadores(self):
-        with self.conn.cursor() as cur:
-            data = cur.execute("""
-                    SELECT * FROM "programacion_cargadores"
-                                """)
-            return data.fetchall()
     
     def read_one_autobus(self, id):
         with self.conn.cursor() as cur:
@@ -102,19 +89,13 @@ class Connection():
                                 """, (id,))
             return data.fetchone()
         
-    def read_one_prog_autobus(self, id):
+    def read_one_uso_cargador_bus(self, id):
         with self.conn.cursor() as cur:
             data = cur.execute("""
-                    SELECT * FROM "programacion_autobuses" WHERE id_programacion_autobuses = %s
+                    SELECT * FROM "uso_cargador_bus" WHERE id_uso_cargador_bus = %s
                                 """, (id,))
             return data.fetchone()
         
-    def read_one_prog_cargador(self, id):
-        with self.conn.cursor() as cur:
-            data = cur.execute("""
-                    SELECT * FROM "programacion_cargadores" WHERE id_programacion_cargadores = %s
-                                """, (id,))
-            return data.fetchone()
 
     def delete_autobus(self, id):
         with self.conn.cursor() as cur:
@@ -137,52 +118,39 @@ class Connection():
                         """, (id,))
         self.conn.commit()
 
-    def delete_prog_autobus(self, id):
+    def delete_uso_cargador_bus(self, id):
         with self.conn.cursor() as cur:
             cur.execute("""
-                    DELETE FROM "programacion_autobuses" WHERE id_programacion_autobuses = %s
+                    DELETE FROM "uso_cargador_bus" WHERE id_uso_cargador_bus = %s
                         """, (id,))
         self.conn.commit()
     
-    def delete_prog_cargador(self, id):
-        with self.conn.cursor() as cur:
-            cur.execute("""
-                    DELETE FROM "programacion_cargadores" WHERE id_programacion_cargadores = %s
-                        """, (id,))
-        self.conn.commit()
 
     def update_autobus(self, data):
         with self.conn.cursor() as cur:
             cur.execute("""
-                    UPDATE "autobus" SET placa = %(placa)s, marca = %(marca)s, ruta = %(ruta)s WHERE id_autobus = %(id_autobus)s
+                    UPDATE "autobus" SET estado = %(estado)s WHERE id_autobus = %(id_autobus)s
                         """, data)
         self.conn.commit()
 
     def update_cargador(self, data):
         with self.conn.cursor() as cur:
             cur.execute("""
-                    UPDATE "cargador" SET autobus_fk = %(autobus_fk)s WHERE id_cargador = %(id_cargador)s
+                    UPDATE "cargador" SET estado = %(estado)s WHERE id_cargador = %(id_cargador)s
                         """, data)
         self.conn.commit()
 
     def update_horario(self, data):
         with self.conn.cursor() as cur:
             cur.execute("""
-                    UPDATE "horario" SET hora = %(hora)s, hora_pico = %(hora_pico)s WHERE id_horario = %(id_horario)s
+                    UPDATE "horario" SET hora_pico = %(hora_pico)s, hora_inicio = %(hora_inicio)s, hora_fin = %(hora_fin)s WHERE id_horario = %(id_horario)s
                         """, data)
         self.conn.commit()
 
-    def update_prog_autobus(self, data):
+    def update_uso_cargador_bus(self, data):
         with self.conn.cursor() as cur:
             cur.execute("""
-                    UPDATE "programacion_autobuses" SET autobus_fk = %(autobus_fk)s, horario_fk = %(horario_fk)s WHERE id_programacion_autobuses = %(id_programacion_autobuses)s
-                        """, data)
-        self.conn.commit()
-
-    def update_prog_cargador(self, data):
-        with self.conn.cursor() as cur:
-            cur.execute("""
-                    UPDATE "programacion_cargadores" SET autobus_fk = %(autobus_fk)s, horario_fk = %(horario_fk)s WHERE id_programacion_cargadores = %(id_programacion_cargadores)s
+                    UPDATE "uso_cargador_bus" SET horario_fk = %(horario_fk)s, cargador_fk = %(cargador_fk)s, autobus_fk = %(autobus_fk)s WHERE id_uso_cargador_bus = %(id_uso_cargador_bus)s
                         """, data)
         self.conn.commit()
 

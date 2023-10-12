@@ -1,10 +1,9 @@
 from fastapi import FastAPI
-from model.connection import Connection
-from schemas.Autobus_schema import AutobusSchema
-from schemas.Cargador_schema import CargadorSchema
-from schemas.Horario_schema import HorarioSchema
-from schemas.Programacion_autobuses_schema import ProgramacionAutobusesSchema
-from schemas.Programacion_cargadores_schema import ProgramacionCargadoresSchema 
+from repositorio.connection import Connection
+from modelo.Autobus_schema import AutobusSchema
+from modelo.Cargador_schema import CargadorSchema
+from modelo.Horario_schema import HorarioSchema
+from modelo.Uso_cargador_schema import UsoCargadorBusSchema
 
 app = FastAPI()
 conn = Connection()
@@ -74,7 +73,7 @@ def det_one(id:int):
 def delete(id:int):
     conn.delete_cargador(id)
 
-@app.put("/api/caragdor/{id}")
+@app.put("/api/cargador/{id}")
 def update(Cargador_data:CargadorSchema, id:int):
     data = Cargador_data.dict()
     data["id_cargador"] = id
@@ -109,55 +108,29 @@ def update(Horario_data:HorarioSchema, id:int):
     conn.update_horario(data)
 
 #ruta para las crud de prog_autobus
-@app.post("/api/prog_autobus")
-def insert (ProgAutobus_data:ProgramacionAutobusesSchema):
+@app.post("/api/uso_cargador_bus")
+def insert (ProgAutobus_data:UsoCargadorBusSchema):
     data = ProgAutobus_data.dict()
     print(data)
-    conn.Programacion_autobusesWrite(data)
+    conn.UsoCargadorBusWrite(data)
 
-@app.get("/api/prog_autobus")
+@app.get("/api/uso_cargador_bus")
 def read():
-    data = conn.read_programacion_autobuses()
-    return conn.read_programacion_autobuses()
+    data = conn.read_uso_cargador_bus()
+    return conn.read_uso_cargador_bus()
 
-@app.get("/api/prog_autobus/{id}")
+@app.get("/api/uso_cargador_bus/{id}")
 def det_one(id:int):
-    return conn.read_one_prog_autobus(id)
+    return conn.read_one_uso_cargador_bus(id)
 
-@app.delete("/api/prog_autobus/{id}")
+@app.delete("/api/uso_cargador_bus/{id}")
 def delete(id:int):
-    conn.delete_prog_autobus(id)
+    conn.delete_uso_cargador_bus(id)
 
-@app.put("/api/prog_autobus/{id}")
-def update(progauto_data:ProgramacionAutobusesSchema, id:int):
+@app.put("/api/uso_cargador_bus/{id}")
+def update(progauto_data:UsoCargadorBusSchema, id:int):
     data = progauto_data.dict()
-    data["id_programacion_autobuses"] = id
+    data["id_uso_cargador"] = id
     print(data)
-    conn.update_prog_autobus(data)
+    conn.update_uso_cargador_bus(data)
 
-#ruta para las crud de prog_cargador
-@app.post("/api/prog_cargador")
-def insert (ProgCargador_data:ProgramacionCargadoresSchema):
-    data = ProgCargador_data.dict()
-    print(data)
-    conn.Programacion_cargadoresWrite(data)
-
-@app.get("/api/prog_cargador")
-def read():
-    data = conn.read_programacion_cargadores()
-    return conn.read_programacion_cargadores()
-
-@app.get("/api/prog_cargador/{id}")
-def det_one(id:int):
-    return conn.read_one_prog_cargador(id)
-
-@app.delete("/api/prog_cargador/{id}")
-def delete(id:int):
-    conn.delete_prog_cargador(id)
-
-@app.put("/api/prog_cargador/{id}")
-def update(progcarg_data:ProgramacionCargadoresSchema, id:int):
-    data = progcarg_data.dict()
-    data["id_programacion_cargadores"] = id
-    print(data)
-    conn.update_prog_cargador(data)
