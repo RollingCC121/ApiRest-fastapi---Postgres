@@ -1,13 +1,18 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from modelo.Autobus_schema import AutobusSchema
 from modelo.Cargador_schema import CargadorSchema
 from modelo.Horario_schema import HorarioSchema
 from modelo.Uso_cargador_schema import UsoCargadorBusSchema
+from modelo.inf_hora_id_schema import InformeHoraId
+from modelo.inf_utilCarHora_schema import InfoUtilCargHora
 from contexto.conexion import Connection
 from repositorio.crud_autobus import CrudAutobus
 from repositorio.crud_cargador import CrudCargador
 from repositorio.crud_horario import CrudHorario
 from repositorio.crud_uso_cargador_bus import CrudUsoCargadorBus 
+from repositorio.crud_informes import Informes
+from repositorio.crud_InfoUtilCargHora import CrudInfoUtilCargHora
+from repositorio.crud_InfoUtilAutoHora import CrudInfoUtilAutoHora
 from servicio.ServHorario import ServicioHorario
 from fastapi import HTTPException
 
@@ -17,7 +22,30 @@ crudautobus = CrudAutobus()
 crudcargador = CrudCargador()
 crudhorario = CrudHorario()
 crudcargadorbus = CrudUsoCargadorBus()
+crudinformes = Informes()
+crudinfocarghora = CrudInfoUtilCargHora()
+crudinfoautohora = CrudInfoUtilAutoHora()
 
+@app.get("/api/informe_hora/{id}")
+def info_id(id: int, info_id_data: InformeHoraId, response: Response):
+    data = {"id_horario": id, "hora_pico": info_id_data.hora_pico, "hora_inicio": info_id_data.hora_inicio, "hora_fin": info_id_data.hora_fin}
+    result = crudinformes.hora_id(data)
+    
+    if result:
+        return result  # Retorna el resultado al cliente
+    else:
+        raise HTTPException(status_code=404, detail="Información no encontrada")
+
+
+@app.get("/api/infoutilcarghora")
+def read():
+    data = crudinfocarghora.read_infocarghora()
+    return crudinfocarghora.read_infocarghora()
+
+@app.get("/api/infoutilautohora")
+def read():
+    data = crudinfoautohora.read_infoautohora()
+    return crudinfoautohora.read_infoautohora()
 
 #ruta para las crud de autobus
 @app.post("/api/autobus")
