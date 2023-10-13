@@ -169,42 +169,29 @@ $$ LANGUAGE plpgsql;
 
 
 
--- Crea el procedimiento almacenado
-CREATE OR REPLACE FUNCTION informe_utilizacion_cargadores_por_hora() RETURNS TABLE (
-    hora_pico varchar,
-    hora_inicio time,
-    hora_fin time,
-    total_cargadores int,
-    cargadores_ocupados int
+CREATE OR REPLACE FUNCTION generar_informe_por_id(id_horario_param INT)
+RETURNS TABLE (
+    id_horario INT,
+    hora_pico VARCHAR,
+    hora_inicio TIME,
+    hora_fin TIME
 ) AS $$
-DECLARE
-    hora_rec horario%rowtype; -- Variable de tipo registro para el bucle
 BEGIN
-    -- Itera a través de los horarios
-    FOR hora_rec IN SELECT * FROM horario
-    LOOP
-        -- Obtiene la hora pico, hora de inicio y hora de fin
-        hora_pico := hora_rec.hora_pico;
-        hora_inicio := hora_rec.hora_inicio;
-        hora_fin := hora_rec.hora_fin;
-        
-        -- Calcula el total de cargadores en ese horario
-        SELECT COUNT(*) INTO total_cargadores
-        FROM cargador;
-        
-        -- Calcula la cantidad de cargadores ocupados en ese horario
-        SELECT COUNT(*) INTO cargadores_ocupados
-        FROM uso_cargador_bus
-        WHERE horario_fk = hora_rec.id_horario;
-        
-        -- Devuelve la fila actual como resultado
-        RETURN NEXT;
-    END LOOP;
+    RETURN QUERY
+    SELECT
+        h."id_horario",
+        h."hora_pico",
+        h."hora_inicio",
+        h."hora_fin"
+    FROM
+        horario h
+    WHERE
+        h."id_horario" = id_horario_param;
 END;
 $$ LANGUAGE plpgsql;
 
 -- Ejecuta el procedimiento almacenado
-SELECT * FROM informe_utilizacion_cargadores_por_hora();
+SELECT * FROM generar_informe_por_id(1);
 
 
 
