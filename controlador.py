@@ -8,7 +8,8 @@ from repositorio.crud_autobus import CrudAutobus
 from repositorio.crud_cargador import CrudCargador
 from repositorio.crud_horario import CrudHorario
 from repositorio.crud_uso_cargador_bus import CrudUsoCargadorBus 
-
+from servicio.ServHorario import ServicioHorario
+from fastapi import HTTPException
 
 app = FastAPI()
 
@@ -21,7 +22,7 @@ crudcargadorbus = CrudUsoCargadorBus()
 #ruta para las crud de autobus
 @app.post("/api/autobus")
 def insert (Autobus_data:AutobusSchema):
-    data = Autobus_data.dict()
+    data = Autobus_data.estado
     print(data)
     crudautobus.AutobusWrite(data)
 
@@ -40,15 +41,16 @@ def delete(id:int):
 
 @app.put("/api/autobus/{id}")
 def update(Autobus_data:AutobusSchema, id:int):
-    data = Autobus_data.dict()
-    data["id_autobus"] = id
+    #data = Autobus_data.dict()
+    data = {"id_autobus": id, "estado": Autobus_data.estado}
     print(data)
     crudautobus.update_autobus(data)
+    return {"message": "Registro actualizado"}
 
 #ruta para las crud de cargador
 @app.post("/api/cargador")
 def insert (Cargador_data:CargadorSchema):
-    data = Cargador_data.dict()
+    data = Cargador_data.estado
     print(data)
     crudcargador.CargadorWrite(data)
 
@@ -63,14 +65,15 @@ def det_one(id:int):
 
 @app.delete("/api/cargador/{id}")
 def delete(id:int):
+    print(int)
     crudcargador.delete_cargador(id)
 
 @app.put("/api/cargador/{id}")
 def update(Cargador_data:CargadorSchema, id:int):
-    data = Cargador_data.dict()
-    data["id_cargador"] = id
+    data = {"id_autobus": id, "estado": Cargador_data.estado}
     print(data)
     crudcargador.update_cargador(data)
+    return {"message": "Registro actualizado"}
 
 #ruta para las crud de horario
 @app.post("/api/horario")
@@ -78,6 +81,7 @@ def insert (Horario_data:HorarioSchema):
     data = Horario_data.dict()
     print(data)
     crudhorario.HorarioWrite(data)
+    
 
 @app.get("/api/horario")
 def read():
@@ -94,10 +98,10 @@ def delete(id:int):
 
 @app.put("/api/horario/{id}")
 def update(Horario_data:HorarioSchema, id:int):
-    data = Horario_data.dict()
-    data["id_horario"] = id
+    data = {"id_horario": id, "hora_pico": Horario_data.hora_pico, "hora_inicio": Horario_data.hora_inicio, "hora_fin": Horario_data.hora_fin}
     print(data)
     crudhorario.update_horario(data)
+    return {"message": "Registro actualizado"}
 
 #ruta para las crud de prog_autobus
 @app.post("/api/uso_cargador_bus")
@@ -121,8 +125,8 @@ def delete(id:int):
 
 @app.put("/api/uso_cargador_bus/{id}")
 def update(progauto_data:UsoCargadorBusSchema, id:int):
-    data = progauto_data.dict()
-    data["id_uso_cargador"] = id
+    data = {"id_uso_cargador_bus": id, "horario_fk": progauto_data.horario_fk, "cargador_fk": progauto_data.cargador_fk, "autobus_fk": progauto_data.autobus_fk}
     print(data)
     crudcargadorbus.update_uso_cargador_bus(data)
+    return {"message": "Registro actualizado"}
 

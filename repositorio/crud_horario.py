@@ -7,11 +7,16 @@ class CrudHorario():
     conn = asos.conn   
 
     def HorarioWrite(self,data):
-                with self.conn.cursor() as cur:
-                    cur.execute("""
-                            INSERT INTO "horario"(hora_pico,hora_inicio,hora_fin) VALUES(%(hora_pico)s, %(hora_inicio)s, %(hora_fin)s) 
-                                """, data)
-                    self.conn.commit()
+        asos = Connection()
+        conn = asos.conn
+        try:
+            with conn.cursor() as cur:
+                cur.execute("SELECT insertar_horario(%(hora_pico)s,%(hora_inicio)s,%(hora_fin)s);", (data))
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            print(f"Error al insertar en la tabla 'horario': {e}")
+    
 
     def read_horario(self):
         with self.conn.cursor() as cur:
@@ -28,15 +33,18 @@ class CrudHorario():
             return data.fetchone()
         
     def delete_horario(self, id):
-        with self.conn.cursor() as cur:
-            cur.execute("""
-                    DELETE FROM "horario" WHERE id_horario = %s
-                        """, (id,))
-        self.conn.commit()
+        asos = Connection()
+        conn = asos.conn
+        try:
+            with conn.cursor() as cur:
+                # Utiliza cur.execute para ejecutar una sentencia SQL DELETE
+                cur.execute("CALL delete_from_horario(%(id_horario)s);", (id))
+            conn.commit()
+            return {"message": f"Registro de horario con ID {id} eliminado"}
+        except Exception as e:
+            return {"error": str(e)}
 
     def update_horario(self, data):
         with self.conn.cursor() as cur:
-            cur.execute("""
-                    UPDATE "horario" SET hora_pico = %(hora_pico)s, hora_inicio = %(hora_inicio)s, hora_fin = %(hora_fin)s WHERE id_horario = %(id_horario)s
-                        """, data)
-        self.conn.commit()
+            cur.execute("SELECT actualizar_horario(%(id_horario)s,%(hora_pico)s,%(hora_inicio)s,%(hora_fin)s);", (data))#{'id_autobus':data,'estado': data})
+            self.conn.commit()
