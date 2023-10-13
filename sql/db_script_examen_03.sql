@@ -1,4 +1,9 @@
 
+create user pollito with password daniel12345;
+grant usage,create,connect on schema public to pollito;
+grant execute on all functions in schema public to pollito;
+
+
 CREATE TABLE horario (
   "id_horario" serial PRIMARY KEY,
   "hora_pico" varchar not null,
